@@ -30,7 +30,7 @@ def registarpedido():
     relatorio = raw_input()
     hoje = datetime.now().date()
     inserir = ("INSERT INTO Pedido "
-               "(idPedido, Estado, data, Observações, Doente_idDoente, idEpisodio, Relatorio)"
+               "(idPedido, Estado, data, Observacoes, Doente_idDoente, idEpisodio, Relatorio)"
                "VALUES (NULL, %(estado)s, %(data)s, %(obser)s,%(doente)s,%(episodio)s,%(relatorio)s)")
     data = {
         'data': hoje,
