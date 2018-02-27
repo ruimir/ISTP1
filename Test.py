@@ -13,7 +13,7 @@ print("PedidosApp")
 def registarpedido():
     print("Numero de Paciente:")
     paciente = int(input())
-    query = ("SELECT * from Doente "
+    query = ("SELECT * FROM Doente "
              "WHERE idDoente = " + str(paciente))
     cursor = cnx.cursor()
     cursor.execute(query)
@@ -26,8 +26,6 @@ def registarpedido():
     episodio = int(input())
     print("Observacoes:")
     orbservacoes = raw_input()
-    print("Relatorio:")
-    relatorio = raw_input()
     hoje = datetime.now().date()
     inserir = ("INSERT INTO Pedido "
                "(idPedido, Estado, data, Observacoes, Doente_idDoente, idEpisodio, Relatorio)"
@@ -38,12 +36,46 @@ def registarpedido():
         'obser': orbservacoes,
         'doente': paciente,
         'episodio': episodio,
-        'relatorio': relatorio
+        'relatorio': ""
     }
     cursor.execute(inserir, data)
     cnx.commit()
     cursor.close()
     print ("Registo Concluído")
+
+
+def alterarpedido():
+    print("Numero de Paciente:")
+    paciente = int(input())
+    query = ("SELECT * FROM Doente "
+             "WHERE idDoente = " + str(paciente))
+    cursor = cnx.cursor()
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result is None:
+        print("Doente not found")
+        quit(1)
+    print("Doente Identificado:" + str(result[2]) + "\n")
+    print("Pedidos atuais do doente:")
+    getInfo = ("SELECT idPedido, Observacoes FROM pedido AS P"
+               "    INNER JOIN doente AS D ON D.idDoente = P.Doente_idDoente"
+               "    WHERE idDoente = " + str(paciente) + " AND Estado = 'Scheduled'"
+                                                         "    OR Estado = 'Changed'")
+    cursor.execute(getInfo)
+    for row in cursor:
+        getId, getObs = str(row).split(",")
+        lixo, idPedido = getId.split("(")
+        lixo, obs, lixo = getObs.split('\'')
+        print("Pedido nº: " + idPedido + "   Observações: " + obs + "\n")
+
+    idPedido = input("Pedido que deseja alterar:")
+    obs = raw_input("Altere as observações:")
+    alteraPedidoQuery = ("UPDATE pedido SET Observacoes = '" + str(obs) +
+                         "', Estado='Changed' WHERE idPedido=" + str(idPedido) + ";")
+    cursor.execute(alteraPedidoQuery)
+    cnx.commit()
+    cursor.close()
+    print("Alteração efetuada com sucesso")
 
 
 while True:
@@ -53,6 +85,6 @@ while True:
     if res == 1:
         registarpedido()
     if res == 2:
-        pass
+        alterarpedido()
     else:
         print("Erro!")

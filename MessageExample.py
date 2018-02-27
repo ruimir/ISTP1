@@ -18,7 +18,7 @@ hl7.add_group("ORM_O01_PATIENT")
 hl7.ORM_O01_PATIENT.pid.pid_2 = "1"
 hl7.ORM_O01_PATIENT.pid.pid_3 = "A-10001"
 hl7.ORM_O01_PATIENT.pid.pid_5 = "B-10001"
-hl7.ORM_O01_PATIENT.pid.pid_6 = "DOE^JOHN"
+hl7.ORM_O01_PATIENT.pid.pid_6 = "DOE JOHN"
 
 # PV1
 hl7.ORM_O01_PATIENT.add_group("ORM_O01_PATIENT_VISIT")
