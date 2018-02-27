@@ -1,6 +1,7 @@
 import socket  # Import socket module
 from hl7apy.parser import parse_message  # Message Parser
 import mysql.connector
+from dateutil import parser
 from datetime import date, datetime, timedelta
 
 s = socket.socket()  # Create a socket object
@@ -27,10 +28,14 @@ while True:
     # Get Message Content
     idpedido = message.ORM_O01_ORDER.ORC.orc_2.value
     estado = message.ORM_O01_ORDER.orc.orc_1.value
-    data = message.ORM_O01_ORDER.ORC.orc_10.value
+    mdata = message.ORM_O01_ORDER.ORC.orc_10.value
     observacoes = message.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_13.value
     idepisodio = message.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_4.value
-    relatorio=message.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_14.value
+    relatorio = message.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_12.value
+    if estado=="CN":
+        estado="Canceled"
+    if estado=="SH":
+        estado="Scheduled"
     # Insert/Update Patient Info
     cursor = cnx.cursor()
     insert = "INSERT INTO `Exames`.`Doente` (`idDoente`, `numProcesso`, `Nome`, `Morada`, `Telefone`) VALUES (%(idDoente)s,%(numProcesso)s,%(Nome)s,%(Morada)s,%(Telefone)s) ON DUPLICATE KEY UPDATE `numProcesso`= %(numProcesso)s, `Nome`= %(Nome)s, `Morada`=%(Morada)s , `Telefone`=%(Telefone)s "
@@ -42,8 +47,17 @@ while True:
         'Telefone': telefone
     }
     cursor.execute(insert, data)
-    cnx.commit()
     # Insert/Update Exam Info
-
-
+    insert2 = "INSERT INTO `Exames`.`Pedido` (`idPedido`, `Estado`, `data`, `Observacoes`, `Doente_idDoente`, `idEpisodio`, `Relatorio`) VALUES ( %(idPedido)s , %(Estado)s , %(data)s, %(Observacoes)s, %(Doente_idDoente)s,%(idEpisodio)s, %(Relatorio)s) ON DUPLICATE KEY UPDATE `idPedido`= %(idPedido)s, `Estado`=%(Estado)s, `data`=%(data)s, `Observacoes`=%(Observacoes)s, `Doente_idDoente`=%(Doente_idDoente)s, `idEpisodio`=%(idEpisodio)s, `Relatorio` =%(Relatorio)s"
+    data2 = {
+        'idPedido': int(idpedido),
+        'Estado': estado,
+        'data': parser.parse(mdata),
+        'Observacoes': observacoes,
+        'Doente_idDoente': int(iddoente),
+        'idEpisodio': int(idepisodio),
+        'Relatorio': relatorio
+    }
+    cursor.execute(insert2, data2)
+    cnx.commit()
     c.close()  # Close the connection

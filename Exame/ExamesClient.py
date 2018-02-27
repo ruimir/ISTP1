@@ -54,11 +54,8 @@ for (idWorkList, editTime, Pedido_idPedido, Estado, data, Obervacoes, Doente_idD
 
     # ORC
     # https://corepointhealth.com/resource-center/hl7-resources/hl7-obr-segment
-    if Estado == "Cancelado":
-        hl7.ORM_O01_ORDER.orc.orc_1 = "CN"
-    else:
-        hl7.ORM_O01_ORDER.orc.orc_1 = "AG"
-    hl7.ORM_O01_ORDER.ORC.orc_10 = data.strftime("%d - %m - %Y")
+    hl7.ORM_O01_ORDER.orc.orc_1 = "DN"
+    hl7.ORM_O01_ORDER.ORC.orc_10 = data.strftime("%Y-%m-%d")
     hl7.ORM_O01_ORDER.ORC.orc_2 = str(Pedido_idPedido)
 
     # OBR
@@ -68,7 +65,7 @@ for (idWorkList, editTime, Pedido_idPedido, Estado, data, Obervacoes, Doente_idD
     hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.add_segment("ORM_O01_ORDER_CHOICE")
     hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.add_segment("OBR")
     hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_13 = Obervacoes
-    hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_14 = Relatorio
+    hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_12 = Relatorio
     hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.OBR.obr_4 = str(idEpisodio)
     hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.add_segment("RQD")
     hl7.ORM_O01_ORDER.ORM_O01_ORDER_DETAIL.ORM_O01_ORDER_CHOICE.add_segment("RQ1")

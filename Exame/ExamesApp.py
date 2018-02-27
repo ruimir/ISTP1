@@ -44,7 +44,7 @@ def realizarExame():
     print("Relatório:")
     report = raw_input()
     update = ("UPDATE Pedido "
-              "SET Relatorio= %(relatorio)s, Estado='Concluido'"
+              "SET Relatorio= %(relatorio)s, Estado='Complete'"
               "WHERE idPedido=%(pedido)s")
     data = {
         'pedido': res,
