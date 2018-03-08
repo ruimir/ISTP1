@@ -13,11 +13,11 @@ cnx = mysql.connector.connect(user='python', password='Python1!',
 print("Exames")
 
 query = "SELECT * FROM WorkList"
-cursor = cnx.cursor()
+cursor = cnx.cursor(buffered=True)
 cursor.execute(query)
 messages = []
 for (idWorkList, editTime, Pedido_idPedido, Estado, data, Obervacoes, Doente_idDoente, idEpisodio, Relatorio) in cursor:
-    cursor2 = cnx.cursor()
+    cursor2 = cnx.cursor(buffered=True)
     queryPatient = ("SELECT * FROM Doente WHERE idDoente =" + str(Doente_idDoente))
     cursor2.execute(queryPatient)
     patient = cursor2.fetchone()
