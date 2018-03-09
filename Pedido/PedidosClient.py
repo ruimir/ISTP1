@@ -15,7 +15,7 @@ cnx = mysql.connector.connect(user='python', password='Python1!',
 
 
 def pedidosclient(sc):
-    print("Benchmark")
+    print("pedidoscliente")
     query = "SELECT * FROM WorkList"
     cursor = cnx.cursor(buffered=True)
     cursor.execute(query)
