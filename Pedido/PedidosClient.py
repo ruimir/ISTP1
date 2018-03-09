@@ -7,7 +7,7 @@ from hl7apy.consts import VALIDATION_LEVEL
 import socket
 import sched, time
 
-s = sched.scheduler(time.time, time.sleep)
+sch = sched.scheduler(time.time, time.sleep)
 
 cnx = mysql.connector.connect(user='python', password='Python1!',
                               host='127.0.0.1',
@@ -15,7 +15,7 @@ cnx = mysql.connector.connect(user='python', password='Python1!',
 
 
 def pedidosclient(sc):
-    print("PedidosClient")
+    print("Benchmark")
     query = "SELECT * FROM WorkList"
     cursor = cnx.cursor(buffered=True)
     cursor.execute(query)
@@ -100,10 +100,9 @@ def pedidosclient(sc):
         cursor2.execute(delete)
         cnx.commit()
         cursor2.close()
-
     cursor.close()
-    s.enter(20, 1, pedidosclient, (sc,))
+    sch.enter(10, 1, pedidosclient, (sc,))
 
 
-s.enter(0, 1, pedidosclient, (s,))
-s.run()
+sch.enter(0, 1, pedidosclient, (sch,))
+sch.run()

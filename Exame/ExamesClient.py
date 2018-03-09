@@ -7,7 +7,7 @@ from hl7apy.consts import VALIDATION_LEVEL
 import socket
 import sched, time
 
-s = sched.scheduler(time.time, time.sleep)
+sch = sched.scheduler(time.time, time.sleep)
 
 cnx = mysql.connector.connect(user='python', password='Python1!',
                               host='127.0.0.1',
@@ -99,8 +99,8 @@ def examesclient(sc):
         cursor2.close()
 
     cursor.close()
-    s.enter(20, 1, examesclient, (sc,))
+    sch.enter(20, 1, examesclient, (sc,))
 
 
-s.enter(0, 1, examesclient, (s,))
-s.run()
+sch.enter(0, 1, examesclient, (sch,))
+sch.run()
