@@ -61,4 +61,5 @@ while True:
     }
     cursor.execute(insert2, data2)
     cnx.commit()
+    c.send("ACK")
     c.close()  # Close the connection
