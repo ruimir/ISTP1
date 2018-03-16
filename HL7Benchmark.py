@@ -85,7 +85,7 @@ def pedidosclient(sc):
     s.send(hl7.value)
     s.close
     cursor.close()
-    sch.enter(5, 1, pedidosclient, (sc,))
+    sch.enter(0.5, 1, pedidosclient, (sc,))
 
 
 sch.enter(0, 1, pedidosclient, (sch,))

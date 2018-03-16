@@ -47,14 +47,15 @@ while True:
         'Telefone': telefone
     }
     cursor.execute(insert, data)
+    cnx.commit()
     # Insert/Update Exam Info
-    insert2 = "INSERT INTO `Exames`.`Pedido` (`idPedido`, `Estado`, `data`, `Observacoes`, `Doente_idDoente`, `idEpisodio`, `Relatorio`) VALUES ( %(idPedido)s , %(Estado)s , %(data)s, %(Observacoes)s, %(Doente_idDoente)s,%(idEpisodio)s, %(Relatorio)s) ON DUPLICATE KEY UPDATE `idPedido`= %(idPedido)s, `Estado`=%(Estado)s, `data`=%(data)s, `Observacoes`=%(Observacoes)s, `Doente_idDoente`=%(Doente_idDoente)s, `idEpisodio`=%(idEpisodio)s, `Relatorio` =%(Relatorio)s"
+    insert2 = "INSERT INTO `Exames`.`Pedido` (`idPedido`, `Estado`, `data`, `Observacoes`, `Doente_idDoente`, `idEpisodio`, `Relatorio`) VALUES ( %(idPedido)s , %(Estado)s , %(data)s, %(Observacoes)s, %(Doente_idDoente)s,%(idEpisodio)s, %(Relatorio)s) ON DUPLICATE KEY UPDATE  `Estado`=%(Estado)s, `data`=%(data)s, `Observacoes`=%(Observacoes)s, `Doente_idDoente`=%(Doente_idDoente)s, `idEpisodio`=%(idEpisodio)s, `Relatorio` =%(Relatorio)s"
     data2 = {
         'idPedido': int(idpedido),
         'Estado': estado,
         'data': parser.parse(mdata),
         'Observacoes': observacoes,
-        'Doente_idDoente': int(iddoente),
+        'Doente_idDoente': iddoente,
         'idEpisodio': int(idepisodio),
         'Relatorio': relatorio
     }
